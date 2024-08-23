@@ -1,0 +1,24 @@
+[package]
+name = "new-contract" 
+version = "0.1.0"
+edition = "2021"
+# Optionally, you can provide a repository link if available.
+# repository = "https://github.com/yourusername/yourrepository"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-sdk = "5.0.0-alpha.1"  # Use the appropriate version of the near-sdk
+borsh = "0.9.1"  # Add this for Borsh serialization/deserialization
+serde = { version = "1.14.0", features = ["derive"] }  # Add serde for serialization/deserialization
+schemars = "0.8"  # Add this for JsonSchema
+
+[profile.release]
+codegen-units = 1
+opt-level = "z"  # Optimize for small code size
+lto = true
+debug = false
+panic = "abort"
+overflow-checks = true
+
