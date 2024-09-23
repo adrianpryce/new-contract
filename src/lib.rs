@@ -1,7 +1,8 @@
 use near_sdk::{
     near_bindgen,
     borsh::{self, BorshDeserialize, BorshSerialize},
-    serde::{Deserialize, Serialize}
+    serde::{Deserialize, Serialize},
+    log,
 };
 use schemars::JsonSchema;
 
@@ -45,14 +46,31 @@ impl Contract {
         }
     }
 
-    // Getter method to return contract metadata
+    // Getter method to return contract metadata, exposing NEP-330 reproducible build information
     pub fn get_metadata(&self) -> ContractSourceMetadata {
         self.contract_metadata.clone()
+    }
+
+    // Helper method to log NEP-330 build information, useful for ecosystem tools.
+    pub fn log_metadata(&self) {
+        log!("Build Environment: {}", self.contract_metadata.build_info.as_ref().unwrap().build_environment);
+        log!("Source Code Snapshot: {}", self.contract_metadata.build_info.as_ref().unwrap().source_code_snapshot);
     }
 }
 
 #[no_mangle]
 pub extern "C" fn add(a: i32, b: i32) -> i32 {
     a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn get_default_greeting() {
+        let contract = Contract::default();
+        // Add tests as needed for NEP-330 reproducibility metadata
+    }
 }
 

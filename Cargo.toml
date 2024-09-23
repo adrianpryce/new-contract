@@ -1,12 +1,18 @@
 [package]
-name = "new-contract" 
+name = "new-contract"
+description = "Contract for NEAR Protocol using NEP-330 reproducible builds"
 version = "0.1.0"
 edition = "2021"
-# Optionally, you can provide a repository link if available.
-# repository = "https://github.com/yourusername/yourrepository"
+repository = "https://github.com/adrianpryce/new-contract"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
+
+[package.metadata.near.reproducible_build]
+# docker image, descriptor of build environment
+image = "sourcescan/cargo-near:0.8.2-rust-1.81.0"
+image_digest = "sha256:3b5e6efa1d0cef710009f9cc20c845d316187cc170455edc5ba7fdf471c19655"
+container_build_command = ["cargo", "near", "build"]
 
 [dependencies]
 near-sdk = "5.0.0-alpha.1"  # Use the appropriate version of the near-sdk
@@ -16,7 +22,7 @@ schemars = "0.8"  # Add this for JsonSchema
 
 [profile.release]
 codegen-units = 1
-opt-level = "z"  # Optimize for small code size
+opt-level = "z"
 lto = true
 debug = false
 panic = "abort"
